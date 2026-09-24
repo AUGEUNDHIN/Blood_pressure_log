@@ -1,281 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     <meta charset="UTF-8">
-    <title>&#9764 Blood_pressure_log & PDF</title>
+    <title>&#9764 Умный семейный дневник давления</title>
+    <link rel="stylesheet" href="css/normolize.css">
+    <link rel="stylesheet" href="css/stile.css">
+    <!-- Подключаем PDF, Автотаблицы и Графики Chart.js -->
+    <script defer src="https://cloudflare.com"></script>
+    <script defer src="https://cloudflare.com"></script>
+    <script defer src="https://jsdelivr.net"></script>
 
-    <!-- Подключаем библиотеки для генерации PDF -->
-    <script src="https://cloudflare.com"></script>
-    <script src="https://cloudflare.com"></script>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f9f9f9;
-        }
-
-        .form-container {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            max-width: 100%;
-        }
-
-        .form-group {
-            display: inline-block;
-            margin-right: 10px;
-            margin-bottom: 10px;
-            vertical-align: top;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 4px;
-        }
-
-        .form-group input {
-            padding: 6px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 100px;
-        }
-
-        .form-group input[type="text"] {
-            width: 180px;
-        }
-
-        button {
-            padding: 7px 15px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            height: 32px;
-            margin-top: 18px;
-        }
-
-        button:hover {
-            background-color: #218838;
-        }
-
-        .btn-pdf {
-            background-color: #007bff;
-            margin-left: 10px;
-        }
-
-        .btn-pdf:hover {
-            background-color: #0069d9;
-        }
-
-        .btn-delete {
-            background-color: #dc3545;
-            padding: 4px 8px;
-            font-size: 12px;
-            height: auto;
-            margin-top: 0;
-        }
-
-        .btn-delete:hover {
-            background-color: #bd2130;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        .high-bp {
-            background-color: #ffe6e6;
-        }
-    </style>
 </head>
 
 <body>
 
-    <h2>📋 Дневник давления с сохранением и PDF</h2>
+    <h2>📋 Единый медицинский комплекс учета давления</h2>
 
-    <div class="form-container">
-        <form id="bpForm">
-            <div class="form-group">
-                <label>Дата</label>
-                <input type="date" id="bpDate" required>
-            </div>
-            <div class="form-group">
-                <label>Время</label>
-                <input type="time" id="bpTime" required>
-            </div>
-            <div class="form-group">
-                <label>Сис (Верхнее)</label>
-                <input type="number" id="systolic" placeholder="120" min="50" max="250" required>
-            </div>
-            <div class="form-group">
-                <label>Диа (Нижнее)</label>
-                <input type="number" id="diastolic" placeholder="80" min="30" max="150" required>
-            </div>
-            <div class="form-group">
-                <label>Пульс</label>
-                <input type="number" id="pulse" placeholder="70" min="30" max="200" required>
-            </div>
-            <div class="form-group">
-                <label>Примечание</label>
-                <input type="text" id="note" placeholder="Например: после лекарства">
-            </div>
-            <button type="submit">Добавить</button>
-            <!-- Кнопка экспорта -->
-            <button type="button" class="btn-pdf" id="downloadPdf">Скачать PDF</button>
-        </form>
+    <!-- Управление профилями -->
+    <div class="profile-manager">
+        <div class="profile-select-wrapper">
+            <label for="userSelect"><strong>Профиль:</strong></label>
+            <select id="userSelect"></select>
+            <button type="button" class="btn-delete" id="deleteUserBtn">Удалить человека</button>
+        </div>
+        <div style="border-left: 1px solid #ccc; height: 25px; margin: 0 5px;"></div>
+        <div class="profile-select-wrapper">
+            <input type="text" id="newUserName" placeholder="Имя нового человека"
+                style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; width: 150px;">
+            <button type="button" id="addUserBtn" style="background-color: #17a2b8;">+ Добавить</button>
+        </div>
     </div>
 
-    <table id="bpTable">
-        <thead>
-            <tr>
-                <th>Дата</th>
-                <th>Время</th>
-                <th>Давление (АД)</th>
-                <th>Пульс</th>
-                <th>Примечание</th>
-                <th>Действие</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <div id="mainContent">
+        <!-- Форма ввода замера -->
+        <div class="form-container">
+            <h3 id="formTitle" style="margin-top: 0; margin-bottom: 15px; color: #444;">Запись</h3>
+            <form id="bpForm">
+                <div class="form-group">
+                    <label>Дата</label>
+                    <input type="date" id="bpDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Время</label>
+                    <input type="time" id="bpTime" required>
+                </div>
+                <div class="form-group">
+                    <label>Сис (Верхнее)</label>
+                    <input type="number" id="systolic" placeholder="120" min="50" max="250" required>
+                </div>
+                <div class="form-group">
+                    <label>Диа (Нижнее)</label>
+                    <input type="number" id="diastolic" placeholder="80" min="30" max="150" required>
+                </div>
+                <div class="form-group">
+                    <label>Пульс</label>
+                    <input type="number" id="pulse" placeholder="70" min="30" max="200" required>
+                </div>
+                <div class="form-group">
+                    <label>Примечание</label>
+                    <input type="text" id="note" placeholder="Например: после сна">
+                </div>
+                <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button type="submit">Добавить замер</button>
+                    <button type="button" class="btn-pdf" id="downloadPdf">Скачать PDF</button>
+                    <button type="button" class="btn-tg" id="shareTelegram">Отправить в Telegram ✈️</button>
+                </div>
+            </form>
+        </div>
 
-    <script>
-        let bpRecords = [];
+        <!-- Фильтры по датам -->
+        <div class="filter-container">
+            <strong>📅 Фильтр периода:</strong>
+            <label>С: <input type="date" id="filterStart"></label>
+            <label>По: <input type="date" id="filterEnd"></label>
+            <button type="button" id="clearFilters"
+                style="background-color: #6c757d; padding: 4px 10px; font-size: 12px;">Сбросить</button>
+        </div>
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const now = new Date();
-            document.getElementById('bpDate').value = now.toISOString().split('T')[0];
-            document.getElementById('bpTime').value = now.toTimeString().slice(0, 5);
+        <!-- Панель аналитики -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <h4>Минимум за период</h4>
+                <div class="stat-val" id="statMin">--</div>
+            </div>
+            <div class="stat-card avg">
+                <h4>Среднее значение</h4>
+                <div class="stat-val" id="statAvg">--</div>
+            </div>
+            <div class="stat-card max">
+                <h4>Максимум за период</h4>
+                <div class="stat-val" id="statMax">--</div>
+            </div>
+        </div>
 
-            const savedData = localStorage.getItem('bloodPressureLog');
-            if (savedData) {
-                bpRecords = JSON.parse(savedData);
-                renderTable();
-            }
-        });
+        <!-- График динамики -->
+        <div class="chart-container">
+            <canvas id="bpChart" style="width:100%; max-height:350px;"></style></canvas>
+        </div>
 
-        function renderTable() {
-            const tbody = document.querySelector('#bpTable tbody');
-            tbody.innerHTML = '';
+        <!-- Таблица данных -->
+        <table id="bpTable">
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Время</th>
+                    <th>Давление (АД)</th>
+                    <th>Пульсовое (ПД)</th>
+                    <th>Пульс</th>
+                    <th>Примечание</th>
+                    <th>Действие</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div id="emptyState" class="no-data" style="display: none;">В выбранном диапазоне дат нет замеров.</div>
+    </div>
 
-            const sortedRecords = [...bpRecords].sort((a, b) => b.id - a.id);
-
-            sortedRecords.forEach(record => {
-                const tr = document.createElement('tr');
-                const formattedDate = new Date(record.date).toLocaleDateString('ru-RU');
-
-                if (record.systolic > 139 || record.diastolic > 89) {
-                    tr.classList.add('high-bp');
-                }
-
-                tr.innerHTML = `
-          <td>${formattedDate}</td>
-          <td>${record.time}</td>
-          <td style="font-weight: bold;">${record.systolic}/${record.diastolic}</td>
-          <td>${record.pulse} уд/мин</td>
-          <td style="text-align: left;">${record.note}</td>
-          <td><button class="btn-delete" onclick="deleteRecord(${record.id})">Удалить</button></td>
-        `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        document.getElementById('bpForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            const newRecord = {
-                id: Date.now(),
-                date: document.getElementById('bpDate').value,
-                time: document.getElementById('bpTime').value,
-                systolic: parseInt(document.getElementById('systolic').value),
-                diastolic: parseInt(document.getElementById('diastolic').value),
-                pulse: parseInt(document.getElementById('pulse').value),
-                note: document.getElementById('note').value
-            };
-
-            bpRecords.push(newRecord);
-            saveToLocalStorage();
-            renderTable();
-
-            document.getElementById('systolic').value = '';
-            document.getElementById('diastolic').value = '';
-            document.getElementById('pulse').value = '';
-            document.getElementById('note').value = '';
-        });
-
-        function deleteRecord(id) {
-            if (confirm('Вы уверены, что хотите удалить эту запись?')) {
-                bpRecords = bpRecords.filter(record => record.id !== id);
-                saveToLocalStorage();
-                renderTable();
-            }
-        }
-
-        function saveToLocalStorage() {
-            localStorage.setItem('bloodPressureLog', JSON.stringify(bpRecords));
-        }
-
-        // ЛОГИКА ЭКСПОРТА В PDF
-        document.getElementById('downloadPdf').addEventListener('click', () => {
-            if (bpRecords.length === 0) {
-                alert('Нет данных для скачивания. Добавьте хотя бы одну запись.');
-                return;
-            }
-
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            // Подключаем стандартный шрифт, поддерживающий кириллицу (Helvetica)
-            doc.setFont("Helvetica", "normal");
-
-            // Заголовок документа
-            doc.text("Dnevnik arterialnogo davleniya", 14, 15);
-
-            // Готовим массив данных для таблицы jsPDF (исключаем колонку "Действие")
-            const tableRows = [...bpRecords]
-                .sort((a, b) => b.id - a.id)
-                .map(r => [
-                    new Date(r.date).toLocaleDateString('ru-RU'),
-                    r.time,
-                    `${r.systolic}/${r.diastolic}`,
-                    `${r.pulse} bpm`,
-                    r.note || '-'
-                ]);
-
-            // Создаем таблицу в PDF
-            doc.autoTable({
-                startY: 22,
-                head: [['Data', 'Vremya', 'AD (SYS/DIA)', 'Puls', 'Primechanie']],
-                body: tableRows,
-                styles: { font: "Helvetica" }, // Применяем шрифт к таблице
-                headStyles: { fillColor: [40, 167, 69] } // Зеленая шапка под стиль приложения
-            });
-
-            // Скачиваем файл
-            doc.save('blood_pressure_log.pdf');
-        });
-    </script>
+    <div id="noUsersState" class="no-data" style="display: none; font-size: 16px; margin-top: 50px;">
+        Нет созданных профилей. Добавьте профиль в верхней панели.
+    </div>
 
 </body>
 

@@ -1,0 +1,206 @@
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        .profile-manager {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .profile-select-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        select {
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            background: white;
+        }
+
+        /* Блок аналитики */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border-top: 4px solid #007bff;
+        }
+
+        .stat-card.avg {
+            border-top-color: #28a745;
+        }
+
+        .stat-card.max {
+            border-top-color: #dc3545;
+        }
+
+        .stat-card h4 {
+            margin: 0 0 10px 0;
+            color: #666;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        .stat-val {
+            font-size: 16px;
+            font-weight: bold;
+            color: #222;
+        }
+
+        /* Контейнер для графика */
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            max-height: 400px;
+        }
+
+        .filter-container {
+            background: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-container label {
+            font-size: 13px;
+            color: #555;
+        }
+
+        .filter-container input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            vertical-align: top;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .form-group input {
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100px;
+        }
+
+        .form-group input[type="text"] {
+            width: 180px;
+        }
+
+        button {
+            padding: 7px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .btn-pdf {
+            background-color: #007bff;
+        }
+
+        .btn-pdf:hover {
+            background-color: #0069d9;
+        }
+
+        .btn-tg {
+            background-color: #17a2b8;
+        }
+
+        .btn-tg:hover {
+            background-color: #138496;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+
+        .btn-delete:hover {
+            background-color: #bd2130;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .high-bp {
+            background-color: #ffe6e6;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
